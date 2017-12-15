@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <!-- Encoding -->
+    <meta charset="UTF-8">
+    <!-- Description of Web Page -->
+    <meta name="description" content="GIS Project">
+    <!-- Keywords important for Google -->
+    <meta name="keywords" content="Raphael Witt, Zhendong Yuan, Geoinformatics, Students">
+    <!-- Author -->
+    <meta name="author" content="Raphael Witt, Zhendong Yuan, Mohammad Robiul Hussain">
+    <!-- Title -->
+    <title>Unemployment Data Visualisation - GI in Society</title>
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+
+    <!-- Style -->
+    <style>
+    h1 {
+      font-weight: bold;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    p {
+      font-style: normal;
+      font-weight: 100;
+      font-family: sans-serif;
+    }
+  	div#descriptionLine {
+  	}
+    div#wrapper{
+      width: 100%;
+      position: relative;
+      z-index: 999999;
+    }
+    div#legend2 {
+      width: 20%;
+      border-color: gray;
+      border-style: solid;
+      background-color: white;
+      float: left;
+      text-align: left;
+    }
+  	div#mapid {
+      width: 99%;
+  		height: 37.5em;
+      position: absolute;
+  	}
+    div#legend {
+      width: 20%;
+      border-color: gray;
+      border-style: solid;
+      background-color: white;
+      float: right;
+      text-align: left;
+    }
+    div#legendtext {
+      text-align: left;
+      margin-left: 2em;
+    }
+    hr {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: solid;
+    border-width: 1 px;
+    }
+  </style>
+  </head>
+
+  <body>
+
+    <h1>Unemployment in substates of Germany</h1>
+
+    <hr></hr>
+
+    <div id="mapid"></div>
+
+    <script type="text/javascript" src="statesJSON.js"></script>
+    <script>
+      //Creating map
+    var mymap = L.map('mapid', {zoomControl:true}).setView([51.5167, 9.9167], 5);
+    mymap.zoomControl.setPosition('bottomleft');
+
+    //Adding a tile layer from OSM
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 14,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, Contributor of state data: <a href="https://github.com/isellsoap">Francesco Schwarz</a>',
+      }).addTo(mymap);
+
+      function style(feature) {
+      return {
+        weight: 2,
+        opacity: 1,
+        color: 'blue',
+        dashArray: '2',
+        fillOpacity: 0.5,
+        };
+      }
+
+      function highlightFeature(e) {
+        var layer = e.target;
+        layer.setStyle({
+            weight: 5,
+            color: '#222',
+            dashArray: '2',
+            fillOpacity: 0.7
+        });
+      }
+
+      function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+      }
+
+      function zoomToFeature(e) {
+        mymap.fitBounds(e.target.getBounds());
+      }
+
+      function onEachFeature(feature, layer) {
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+          click: zoomToFeature
+        });
+      }
+
+      var geojson;
+      geojson = L.geoJson(statesData, {
+        style: style,
+        onEachFeature: onEachFeature
+      }).addTo(mymap);
+
+    </script>
+
+    <div id="wrapper">
+
+
+      <div id="legend2">
+        <div id="legendtext">
+        <p>Legend</p>
+        <P>Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.</p>
+        </div>
+      </div>
+
+
+      <div id="legend">
+        <div id="legendtext">
+        <p>Input parameters</p>
+        <form action="">
+          <input type="radio" name="gdp" value="GDP" checked=true>GDP<br>
+          <br>
+          <input type="radio" name="riskop" value="riskop">Risk of Poverty<br>
+          <br>
+          <input type="radio" name="networtk" value="networth">Networtk<br>
+          <br>
+          <input type="radio" name="houseprice" value="houseprice">Housing price<br>
+        </form>
+        <P>Here will be placed some basic information about the project.</p>
+        </div>
+      </div>
+  </div>
+
+
+	<br>
+    <br>
+    </body>
+
+</html>
