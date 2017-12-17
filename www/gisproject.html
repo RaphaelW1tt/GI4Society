@@ -14,54 +14,16 @@
     <!-- Title -->
     <title>Unemployment Data Visualisation - GI in Society</title>
 
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+	  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
-
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <script scr="js/SliderControl.js"></script>
 
     <!-- Style -->
     <style>
-    h1 {
-      font-weight: bold;
-      font-family: sans-serif;
-      text-align: center;
-    }
-    p {
-      font-style: normal;
-      font-weight: 100;
-      font-family: sans-serif;
-    }
-  	div#descriptionLine {
-  	}
-    div#wrapper{
-      width: 100%;
-      position: relative;
-      z-index: 999999;
-    }
-    div#legend2 {
-      width: 20%;
-      border-color: gray;
-      border-style: solid;
-      background-color: white;
-      float: left;
-      text-align: left;
-    }
   	div#mapid {
-      width: 99%;
   		height: 37.5em;
-      position: absolute;
   	}
-    div#legend {
-      width: 20%;
-      border-color: gray;
-      border-style: solid;
-      background-color: white;
-      float: right;
-      text-align: left;
-    }
-    div#legendtext {
-      text-align: left;
-      margin-left: 2em;
-    }
     hr {
     display: block;
     margin-left: auto;
@@ -69,18 +31,54 @@
     border-style: solid;
     border-width: 1 px;
     }
+    .col-centered{
+    float: none;
+    margin: auto;
+    }
   </style>
   </head>
 
   <body>
 
-    <h1>Unemployment in substates of Germany</h1>
+    <h1 style="text-align:center">Unemployment in substates of Germany</h1>
 
     <hr></hr>
+    <div class="container-fluid">
+      <div class="row">
+      <div class="col">
+        <p>Legend</p>
+        <P>Unemployment rate</p>
+      </div>
 
-    <div id="mapid"></div>
+      <div class="col-8" id="mapid"></div>
 
-    <script type="text/javascript" src="statesJSON.js"></script>
+      <div class="col">
+        <p>Input parameters</p>
+        <form action="">
+          <input type="radio" name="gdp" value="GDP" checked=true>GDP<br>
+          <br>
+          <input type="radio" name="riskop" value="riskop">Risk of Poverty<br>
+          <br>
+          <input type="radio" name="networtk" value="networth">Networth<br>
+          <br>
+          <input type="radio" name="houseprice" value="houseprice">Housing price<br>
+        </form>
+      </div>
+    </div>
+    </div>
+
+    <div class="container">
+      <div class="col-lg-2 col-centered">
+        <a href="info.html">
+          <img src="img/Hilfe.jpg" class="img-responsive" width="35%"/>
+        </a>
+        <a href="contact.html">
+          <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="35%"/>
+        </a>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="./js/statesJSON.js"></script>
     <script>
       //Creating map
     var mymap = L.map('mapid', {zoomControl:true}).setView([51.5167, 9.9167], 5);
@@ -133,37 +131,7 @@
         style: style,
         onEachFeature: onEachFeature
       }).addTo(mymap);
-
     </script>
-
-    <div id="wrapper">
-
-
-      <div id="legend2">
-        <div id="legendtext">
-        <p>Legend</p>
-        <P>Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.Here will be placed some basic information about the project.</p>
-        </div>
-      </div>
-
-
-      <div id="legend">
-        <div id="legendtext">
-        <p>Input parameters</p>
-        <form action="">
-          <input type="radio" name="gdp" value="GDP" checked=true>GDP<br>
-          <br>
-          <input type="radio" name="riskop" value="riskop">Risk of Poverty<br>
-          <br>
-          <input type="radio" name="networtk" value="networth">Networtk<br>
-          <br>
-          <input type="radio" name="houseprice" value="houseprice">Housing price<br>
-        </form>
-        <P>Here will be placed some basic information about the project.</p>
-        </div>
-      </div>
-  </div>
-
 
 	<br>
     <br>
