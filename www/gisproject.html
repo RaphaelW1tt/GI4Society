@@ -29,7 +29,11 @@
       border-width: 1 px;
   	}
     div#placeholder {
-      background-color: lightgrey;
+      border-radius: 20px;
+      border-style: solid;
+      border-color: gray;
+      border-width: 1 px;
+
     }
     hr {
     display: block;
@@ -50,7 +54,7 @@
 
   <body>
 
-    <h1 style="text-align:center">Unemployment in substates of Germany</h1>
+    <h1 style="text-align:center">Unemployment in federal states of Germany</h1>
 
     <hr></hr>
     <div class="container-fluid">
@@ -62,7 +66,7 @@
           <br>
           <br>
           <br>
-          <h5>Input parameters</h5>
+          <h5>Parameters</h5>
           <form>
             <div class="radio">
               <label><input type="radio" value="numofindustries" name="optradio" checked>Number of industries</label>
@@ -120,7 +124,7 @@
         opacity: 1,
         color: 'blue',
         dashArray: '2',
-        fillOpacity: 0.5,
+        fillOpacity: 0.0,
         };
       }
 
