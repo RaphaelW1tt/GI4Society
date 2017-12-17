@@ -23,17 +23,27 @@
     <style>
   	div#mapid {
   		height: 37.5em;
+      border-radius: 20px;
+      border-style: solid;
+      border-color: gray;
+      border-width: 1 px;
   	}
+    div#placeholder {
+      background-color: lightgrey;
+    }
     hr {
     display: block;
     margin-left: auto;
     margin-right: auto;
     border-style: solid;
-    border-width: 1 px;
+    border-width: 2 px;
     }
-    .col-centered{
+    .centered{
     float: none;
-    margin: auto;
+    margin: 0 auto;
+    }
+    .pull-right {
+      float: bottom !important;
     }
   </style>
   </head>
@@ -46,36 +56,50 @@
     <div class="container-fluid">
       <div class="row">
       <div class="col">
-        <p>Legend</p>
-        <P>Unemployment rate</p>
+        <h5>Legend</h5>
+        <img src="img/legendplaceholder.jpg" width="90%"/>
+          <br>
+          <br>
+          <br>
+          <br>
+          <h5>Input parameters</h5>
+          <form>
+            <div class="radio">
+              <label><input type="radio" value="numofindustries" name="optradio" checked>Number of industries</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" value="popdens" name="optradio">Population density</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" value="gdp" name="optradio">GDP</label>
+            </div>
+            <div class="radio">
+              <label><input type="radio" value="riskofpoverty" name="optradio">Risk of poverty</label>
+            </div>
+          </form>
       </div>
 
-      <div class="col-8" id="mapid"></div>
+      <div class="col-6" id="mapid"></div>
 
-      <div class="col">
-        <p>Input parameters</p>
-        <form action="">
-          <input type="radio" name="gdp" value="GDP" checked=true>GDP<br>
-          <br>
-          <input type="radio" name="riskop" value="riskop">Risk of Poverty<br>
-          <br>
-          <input type="radio" name="networtk" value="networth">Networth<br>
-          <br>
-          <input type="radio" name="houseprice" value="houseprice">Housing price<br>
-        </form>
+      <div class="col" id="placeholder">
       </div>
     </div>
     </div>
 
-    <div class="container">
-      <div class="col-lg-2 col-centered">
+    <div class="container-fluid">
+      <div class="row">
+      <div class="col-4">
         <a href="info.html">
-          <img src="img/Hilfe.jpg" class="img-responsive" width="35%"/>
+          <img src="img/Hilfe.jpg" class="img-responsive" width="12%"/>
         </a>
         <a href="contact.html">
-          <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="35%"/>
+          <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="12%"/>
         </a>
       </div>
+      <div class="col-8">
+        <img src="img/slider.jpg" width="50%"/>
+      </div>
+    </div>
     </div>
 
     <script type="text/javascript" src="./js/statesJSON.js"></script>
