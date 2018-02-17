@@ -27,21 +27,34 @@
       border-radius: 20px;
       border-style: solid;
       border-color: gray;
-      border-width: 1 px;
+      border-width: 1px;
   	}
-    div#placeholder {
+    div#displaybox {
       border-radius: 20px;
       border-style: solid;
       border-color: gray;
-      border-width: 1 px;
-
+      border-width: 1px;
+      margin-left: 30px;
+      margin-right: 10px;
+    }
+    div#displayfunctions {
+      border-radius: 20px;
+      border-style: solid;
+      border-color: gray;
+      border-width: 1px;
+      margin-left: 10px;
+      margin-right: 30px;
+    }
+    .container-fluid {
+      margin-top: 25px;
+      margin-bottom: 10px;
     }
     hr {
 		display: block;
 		margin-left: auto;
 		margin-right: auto;
 		border-style: solid;
-		border-width: 2 px;
+		border-width: 1px;
     }
     .centered{
     float: none;
@@ -51,6 +64,7 @@
 	}
 	#te {
 	text-align: center;
+  margin-top: 5px;
 	}
     .pull-right {
       float: bottom !important;
@@ -70,29 +84,36 @@
     transition: opacity .2s;
 	}
   #chartContainer {
+    margin-top: 35px;
+    margin-bottom: 5px;
     height: 50%;
   }
   .head {
     position: absolute;
-    left: 85%;
-    top: 2%;
+    left: 87%;
+    top: 3%;
   }
   #getStateName {
-    font-size: 25px;
+    font-size: 20px;
+    margin-top: 5px;
+  }
+  h2 {
+    text-align: center;
+    margin-top: 10px;
   }
 
   </style>
   </head>
 
   <body>
-    <h1 style="text-align:center">Unemployment in federal states of Germany</h1>
+    <h2>Unemployment in federal states of Germany</h2>
     <div class="head">
         <a target="_blank" href="info.html">
-          <img src="img/Hilfe.jpg" class="img-responsive" width="20%"/>
+          <img src="img/Hilfe.jpg" class="img-responsive" width="13%"/>
       Help
         </a>
         <a target="_blank" href="contact.html">
-          <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="20%"/>
+          <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="13%"/>
       Contact
         </a>
 
@@ -102,7 +123,7 @@
     <hr></hr>
     <div class="container-fluid">
       <div class="row">
-      <div class="col">
+      <div class="col" id="displayfunctions">
         <h5>Legend</h5>
         <img src="img/legendplaceholder.jpg" width="70%"/>
           <br>
@@ -113,7 +134,7 @@
 		  		<select name="parameter" id="parameter" >
                 <option value="numofindustries">Number of Industries</option>
                 <option value="popdens">Population density</option>
-				<option value="gdp">GDP</option>
+				<option value="gdp">GDP per Capita</option>
 				<option value="riskofpoverty">Risk of Poverty</option>
         </select><br>
 		<br>
@@ -143,9 +164,8 @@
 
       <div class="col-6" id="mapid"></div>
 
-      <div class="col" id="placeholder">
-        <p id="getStateName">Selected federal state: </p>
-        <br>
+      <div class="col" id="displaybox">
+        <h5 id="getStateName">Selected federal state: </h5>
         <!-- <p id="getStateName"></p> -->
         <p id="chartContainer"></p>
       </div>
@@ -173,8 +193,8 @@
 				<font size="4" id="year">2010</font>
 			</div>
 		</div> -->
-    </div>
-    </div>
+    <!-- </div>
+    </div> -->
     <!-- <button id="button">Klick</button>
     <p id="testtest">Test</p>
     <br>
@@ -196,10 +216,32 @@
 
 
 	 //Creating map
-    var mymap = L.map('mapid', {zoomControl:true}).setView([51.5167, 9.9167], 5);
+    var mymap = L.map('mapid', {zoomControl:true, maxZoom: 12, minZoom: 5}).setView([51.5167, 9.9167], 5);
     mymap.zoomControl.setPosition('bottomleft');
 
-    var legend = L.control();
+    mymap.setMaxBounds([
+      [40,-5],
+      [60,25]
+    ]);
+
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = ["50.000", "100.000", "150.000", "200.000","250.000"],
+            labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                grades[i]  +'<br>';
+        }
+
+        return div;
+    };
+
+    legend.addTo(mymap);
 
     var stateName;
 
@@ -241,7 +283,7 @@
           click: function(e){
             mymap.fitBounds(e.target.getBounds());
             stateName = feature.properties.NAME_1;
-            document.getElementById("getStateName").innerHTML = "Selected federal state: " + stateName;
+            document.getElementById("getStateName").innerHTML = "Selected federal state:" + "<br/>" + stateName;
             createDaDa();
           }
         });
@@ -370,10 +412,11 @@
   	animationEnabled: true,
   	theme: "light1", // "light1", "light2", "dark1", "dark2"
   	title:{
-  		text: "GDP per Capita"
+  		text: "GDP per Capita",
+      fontFamily: "tahoma",
   	},
   	axisY: {
-  		title: "GDP"
+  		title: "GDP in €"
   	},
   	data: [{
   		type: "column",
@@ -411,7 +454,8 @@ var chart = new CanvasJS.Chart("chartContainer", {
 animationEnabled: true,
 theme: "light1", // "light1", "light2", "dark1", "dark2"
 title:{
-text: "Number of Industries"
+text: "Number of Industries",
+fontFamily: "tahoma",
 },
 axisY: {
 title: "Number of Industries"
@@ -452,10 +496,11 @@ var chart = new CanvasJS.Chart("chartContainer", {
 animationEnabled: true,
 theme: "light1", // "light1", "light2", "dark1", "dark2"
 title:{
-text: "Risk of Poverty"
+text: "Risk of Poverty",
+fontFamily: "tahoma",
 },
 axisY: {
-title: "Poverty rate"
+title: "Poverty rate in %"
 },
 data: [{
 type: "column",
@@ -493,10 +538,12 @@ var chart = new CanvasJS.Chart("chartContainer", {
 animationEnabled: true,
 theme: "light1", // "light1", "light2", "dark1", "dark2"
 title:{
-text: "Population density"
+text: "Population density",
+fontFamily: "tahoma",
 },
 axisY: {
-title: "Population density"
+title: "Population density per km²",
+// interval: 50
 },
 data: [{
 type: "column",
