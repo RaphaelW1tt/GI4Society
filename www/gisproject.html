@@ -88,9 +88,9 @@
       margin: 0 auto;
     }
     #chartContainer {
-      margin-top: 35px;
+      margin-top: 20%;
       margin-bottom: 5px;
-      height: 50%;
+      height: 65%;
     }
     .head {
       position: absolute;
@@ -105,13 +105,17 @@
       line-height: 18px;
       color: #555;
       background-color: white;
-      width: 100px;
+      border-radius: 5px;
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-bottom: 10px;
+      padding-top: 5px;
     }
     .legend i {
         width: 18px;
         height: 18px;
         float: left;
-        margin-right: 8px;
+        margin-right: 10px;
         opacity: 0.7;
     }
   </style>
@@ -343,13 +347,13 @@
       }
 
       function getColor(d) {
-          return d > 500 ? '#800026' :
-                 d > 200  ? '#BD0026' :
-                 d > 175  ? '#E31A1C' :
-                 d > 150  ? '#FC4E2A' :
+          return d > 325 ? '#800026' :
+                 d > 275  ? '#BD0026' :
+                 d > 225  ? '#E31A1C' :
+                 d > 175  ? '#FC4E2A' :
                  d > 125   ? '#FD8D3C' :
-                 d > 100   ? '#FEB24C' :
-                 d > 30   ? '#FED976' :
+                 d > 75   ? '#FEB24C' :
+                 d > 25   ? '#FED976' :
                             'black';
       }
 
@@ -357,7 +361,7 @@
 
       legend.onAdd = function (mymap) {
         var div = L.DomUtil.create('div', 'info legend'),
-        grades = [30, 100, 125, 150, 175, 200, 500],
+        grades = [25, 75, 125, 175, 225, 275, 325],
         labels = [];
         div.innerHTML = "Unemployed in <br> thousand <br>"
             for (var i = 0; i < grades.length; i++) {
