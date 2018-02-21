@@ -68,7 +68,7 @@
     }
     .slidecontainer {
       width: 100%;
-      margin-top: 50%;
+      margin-top: 35%;
     }
     .slider {
       -webkit-appearance: none;
@@ -141,15 +141,16 @@
       <div class="row">
         <div class="col" id="displayfunctions">
           <h5>Information</h5>
-          <p>Please select a parameter down below and click on the federal state you want to retrieve the additional information from.</p>
+          <p>Please select a parameter down below and click on the federal state you want to retrieve the additional information from.<br>
+          By double clicking a federal state the map zooms to it automatically.</p>
           <br>
           <h5>Parameter selection</h5>
           <form>
 		  		      <select name="parameter" id="parameter" >
-                  <option value="numofindustries">Number of Industries</option>
+                  <option value="numofindustries">Number of industries</option>
                   <option value="popdens">Population density</option>
-				          <option value="gdp">GDP per Capita</option>
-				          <option value="riskofpoverty">Risk of Poverty</option>
+				          <option value="gdp">GDP per capita</option>
+				          <option value="riskofpoverty">Risk of poverty</option>
                 </select>
 		            <div class="slidecontainer">
 		                <input type="range" min="2006" max="2016" value="2010" class="slider" id="sliderRange">
@@ -228,6 +229,7 @@
         [40,-5],
         [60,25]
       ]);
+      mymap.doubleClickZoom.disable();
 
       //Adding a tile layer from OSM
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -373,14 +375,35 @@
       };
       legend.addTo(mymap);
 
+      function highlightFeature(e) {
+        var layer = e.target;
+        layer.setStyle({
+            weight: 3,
+            color: 'black',
+            dashArray: '2',
+            fillOpacity: 0.7,
+        });
+      }
+
+      function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+      }
+
       function onEachFeature(feature, layer) {
         layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
           click: function(e){
-            mymap.fitBounds(e.target.getBounds());
+            // mymap.fitBounds(e.target.getBounds());
             stateName = feature.properties.NAME_1;
             document.getElementById("getStateName").innerHTML = "Selected federal state:" + "<br/>" + stateName;
             createDiagrams();
             console.log(feature.properties);
+          }
+        });
+        layer.on({
+          dblclick: function(e){
+            mymap.fitBounds(e.target.getBounds());
           }
         });
       }
