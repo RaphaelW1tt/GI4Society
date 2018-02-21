@@ -10,18 +10,32 @@
     <!-- Keywords important for Google -->
     <meta name="keywords" content="Raphael Witt, Zhendong Yuan, Geoinformatics, Students">
     <!-- Author -->
-    <meta name="author" content="Raphael Witt, Zhendong Yuan, Mohammad Robiul Hussain">
+    <meta name="author" content="Raphael Witt, Zhendong Yuan">
     <!-- Title -->
     <title>Unemployment Data Visualisation - GI in Society</title>
 
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+	  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <!-- <script src="https://unpkg.com/terraformer@1.0.8"></script>
+    <script src="https://unpkg.com/terraformer-wkt-parser@1.1.2"></script> -->
+
 
     <!-- Style -->
     <style>
+    hr {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-style: solid;
+      border-width: 1px;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 10px;
+    }
   	div#mapid {
 	  height: 450px;
       border-radius: 20px;
@@ -45,64 +59,63 @@
       margin-left: 10px;
       margin-right: 30px;
     }
+    #parameter {
+      width: 100%;
+    }
+    #slidervalue {
+      text-align: center;
+      margin-top: 5px;
+    }
+    .slidecontainer {
+      width: 100%;
+      margin-top: 50%;
+    }
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 2px;
+      background: #d3d3d3;
+      outline: inherit;
+      opacity: 1;
+    }
     .container-fluid {
       margin-top: 25px;
       margin-bottom: 10px;
     }
-    hr {
-		display: block;
-		margin-left: auto;
-		margin-right: auto;
-		border-style: solid;
-		border-width: 1px;
-    }
     .centered{
-    float: none;
-    margin: 0 auto;
+      float: none;
+      margin: 0 auto;
     }
-	#test {
-	}
-	#te {
-	text-align: center;
-  margin-top: 5px;
-	}
-    .pull-right {
-      float: bottom !important;
+    #chartContainer {
+      margin-top: 35px;
+      margin-bottom: 5px;
+      height: 50%;
     }
-	.slidecontainer {
-		width: 100%;
-	}
-	.slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 5px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-	}
-  #chartContainer {
-    margin-top: 35px;
-    margin-bottom: 5px;
-    height: 50%;
-  }
-  .head {
-    position: absolute;
-    left: 87%;
-    top: 3%;
-  }
-  #getStateName {
-    font-size: 20px;
-    margin-top: 5px;
-  }
-  h2 {
-    text-align: center;
-    margin-top: 10px;
-  }
-
+    .head {
+      position: absolute;
+      left: 87%;
+      top: 3%;
+    }
+    #getStateName {
+      font-size: 20px;
+      margin-top: 5px;
+    }
+    .legend {
+      line-height: 18px;
+      color: #555;
+      background-color: white;
+      width: 100px;
+    }
+    .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
   </style>
+
   </head>
 
   <body>
@@ -110,279 +123,434 @@
     <div class="head">
         <a target="_blank" href="info.html">
           <img src="img/Hilfe.jpg" class="img-responsive" width="13%"/>
-      Help
+              Help
         </a>
         <a target="_blank" href="contact.html">
           <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="13%"/>
-      Contact
+              Contact
         </a>
-
     </div>
-
 
     <hr></hr>
+
     <div class="container-fluid">
       <div class="row">
-      <div class="col" id="displayfunctions">
-        <h5>Legend</h5>
-        <img src="img/legendplaceholder.jpg" width="70%"/>
+        <div class="col" id="displayfunctions">
+          <h5>Information</h5>
+          <p>Please select a parameter down below and click on the federal state you want to retrieve the additional information from.</p>
           <br>
-          <br>
-          <br>
-          <h5>Select Parameter</h5>
+          <h5>Parameter selection</h5>
           <form>
-		  		<select name="parameter" id="parameter" >
-                <option value="numofindustries">Number of Industries</option>
-                <option value="popdens">Population density</option>
-				<option value="gdp">GDP per Capita</option>
-				<option value="riskofpoverty">Risk of Poverty</option>
-        </select><br>
-		<br>
-		<p>When a parameter is selected, please click on the federal state you want to retrieve the information from.</p>
-    <br>
-		<div class="slidecontainer">
-		  <input type="range" min="2008" max="2015" value="2010" class="slider" id="sliderRange">
-		</div>
-		<div id="te">
-		  <font size="4" id="year">2010</font>
-	    </div>
-
-<!--             <div class="radio">
-              <label><input type="radio" value="numofindustries" name="optradio" checked>Number of industries</label>
-            </div>
-            <div class="radio"> domain/range	rdf data cube vocabulary
-              <label><input type="radio" value="popdens" name="optradio">Population density</label>
-            </div>
-            <div class="radio">
-              <label><input type="radio" value="gdp" name="optradio">GDP</label>
-            </div>
-            <div class="radio">
-              <label><input type="radio" value="riskofpoverty" name="optradio">Risk of poverty</label>
-            </div> -->
+		  		      <select name="parameter" id="parameter" >
+                  <option value="numofindustries">Number of Industries</option>
+                  <option value="popdens">Population density</option>
+				          <option value="gdp">GDP per Capita</option>
+				          <option value="riskofpoverty">Risk of Poverty</option>
+                </select>
+		            <div class="slidecontainer">
+		                <input type="range" min="2006" max="2016" value="2010" class="slider" id="sliderRange">
+		            </div>
+		            <div id="slidervalue">
+		                <font size="4" id="year">2010</font>
+	              </div>
           </form>
-      </div>
-
-      <div class="col-6" id="mapid"></div>
-
-      <div class="col" id="displaybox">
-        <h5 id="getStateName">Selected federal state: </h5>
-        <!-- <p id="getStateName"></p> -->
-        <p id="chartContainer"></p>
+        </div>
+        <div class="col-6" id="mapid"></div>
+        <div class="col" id="displaybox">
+          <h5 id="getStateName">Selected federal state: </h5>
+          <p id="chartContainer"></p>
+        </div>
       </div>
     </div>
-    </div>
-
-    <!-- <div class="container-fluid" id="test">
-      <div class="row">
-      <div class="col-4">
-          <a target="_blank" href="info.html">
-            <img src="img/Hilfe.jpg" class="img-responsive" width="12%"/>
-  		  Help
-          </a>
-          <a target="_blank" href="contact.html">
-            <img src="img/Kontakt_weiß.jpg" class="img-responsive" width="12%"/>
-  		  Contact
-          </a>
-
-      </div> -->
-<!-- 	  	<div class="col-8">
-			<div class="slidecontainer">
-				<input type="range" min="2005" max="2015" value="2010" class="slider" id="sliderRange">
-			</div>
-			<div id="te">
-				<font size="4" id="year">2010</font>
-			</div>
-		</div> -->
-    <!-- </div>
-    </div> -->
-    <!-- <button id="button">Klick</button>
-    <p id="testtest">Test</p>
-    <br>
-    <button id="button2">Klick</button>
-    <p id="testtest2">Test</p> -->
 
     <script type="text/javascript" src="./js/statesJSON.js"></script>
 
     <script>
-    var slider = document.getElementById("sliderRange");
-	var output = document.getElementById("year");
-	output.innerHTML = slider.value;
 
-	slider.oninput = function() {
-	  output.innerHTML = this.value;
-    //getData();
-	}
+      var geoJsonFeatureCollection;
+      var stateName;
+      var gJ;
+      var geojson;
+      var ame = [];
+      var unemp2006 = [];
+      var unemp2007 = [];
+      var unemp2008 = [];
+      var unemp2009 = [];
+      var unemp2010 = [];
+      var unemp2011 = [];
+      var unemp2012 = [];
+      var unemp2013 = [];
+      var unemp2014 = [];
+      var unemp2015 = [];
+      var unemp2016 = [];
 
 
+      var slider = document.getElementById("sliderRange");
+    	var output = document.getElementById("year");
+    	output.innerHTML = slider.value;
 
-	 //Creating map
-    var mymap = L.map('mapid', {zoomControl:true, maxZoom: 12, minZoom: 5}).setView([51.5167, 9.9167], 5);
-    mymap.zoomControl.setPosition('bottomleft');
-
-    mymap.setMaxBounds([
-      [40,-5],
-      [60,25]
-    ]);
-
-    var legend = L.control({position: 'bottomright'});
-
-    legend.onAdd = function (map) {
-
-        var div = L.DomUtil.create('div', 'info legend'),
-            grades = ["50.000", "100.000", "150.000", "200.000","250.000"],
-            labels = [];
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                grades[i]  +'<br>';
+    	slider.oninput = function() {
+    	  output.innerHTML = this.value;
+        //getUnemplyoment();
+        if(slider.value == 2006){
+          geojson.setStyle(style2006);
+        } else if(slider.value == 2007){
+          geojson.setStyle(style2007);
+        }else if(slider.value == 2008){
+          geojson.setStyle(style2008);
+        } else if(slider.value == 2009){
+          geojson.setStyle(style2009);
+        } else if(slider.value == 2010){
+          geojson.setStyle(style2010);
+        } else if (slider.value == 2011){
+          geojson.setStyle(style2011);
+        } else if (slider.value == 2012){
+          geojson.setStyle(style2012);
+        } else if (slider.value == 2013){
+          geojson.setStyle(style2013);
+        } else if (slider.value == 2014){
+          geojson.setStyle(style2014);
+        } else if (slider.value == 2015){
+          geojson.setStyle(style2015);
+        } else if (slider.value == 2016){
+          geojson.setStyle(style2016);
         }
+    	}
 
-        return div;
-    };
+  	  //Creating map
+      var mymap = L.map('mapid', {zoomControl:true, maxZoom: 12, minZoom: 5}).setView([51.5167, 9.9167], 5);
+      mymap.zoomControl.setPosition('bottomleft');
+      mymap.setMaxBounds([
+        [40,-5],
+        [60,25]
+      ]);
 
-    legend.addTo(mymap);
-
-    var stateName;
-
-    //Adding a tile layer from OSM
+      //Adding a tile layer from OSM
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 14,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, Contributor of state data: <a href="https://github.com/isellsoap">Francesco Schwarz</a>',
       }).addTo(mymap);
 
-      function style(feature) {
-      return {
-        weight: 2,
-        opacity: 1,
-        color: 'blue',
-        dashArray: '2',
-        fillOpacity: 0.0,
+      function style2006(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2006)
+        };
+      }
+      function style2007(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2007)
+        };
+      }
+      function style2008(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2008)
+        };
+      }
+      function style2009(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2009)
+        };
+      }
+      function style2010(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2010)
+        };
+      }
+      function style2011(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2011)
+        };
+      }
+      function style2012(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2012)
+        };
+      }
+      function style2013(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2013)
+        };
+      }
+      function style2014(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2014)
+        };
+      }
+      function style2015(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2015)
+        };
+      }
+      function style2016(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: "black",
+          dashArray: '0',
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.unemp2016)
         };
       }
 
-      function highlightFeature(e) {
-        var layer = e.target;
-        layer.setStyle({
-            weight: 5,
-            color: '#222',
-            dashArray: '2',
-            fillOpacity: 0.7
-        });
+      function getColor(d) {
+          return d > 500 ? '#800026' :
+                 d > 200  ? '#BD0026' :
+                 d > 175  ? '#E31A1C' :
+                 d > 150  ? '#FC4E2A' :
+                 d > 125   ? '#FD8D3C' :
+                 d > 100   ? '#FEB24C' :
+                 d > 30   ? '#FED976' :
+                            'black';
       }
 
-      function resetHighlight(e) {
-        geojson.resetStyle(e.target);
-      }
+      var legend = L.control({position: 'bottomright'});
 
+      legend.onAdd = function (mymap) {
+        var div = L.DomUtil.create('div', 'info legend'),
+        grades = [30, 100, 125, 150, 175, 200, 500],
+        labels = [];
+        div.innerHTML = "Unemployed in <br> thousand <br>"
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                    grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+            }
+            return div;
+      };
+      legend.addTo(mymap);
 
       function onEachFeature(feature, layer) {
         layer.on({
-          mouseover: highlightFeature,
-          mouseout: resetHighlight,
           click: function(e){
             mymap.fitBounds(e.target.getBounds());
             stateName = feature.properties.NAME_1;
             document.getElementById("getStateName").innerHTML = "Selected federal state:" + "<br/>" + stateName;
-            createDaDa();
+            createDiagrams();
+            console.log(feature.properties);
           }
         });
       }
 
-      var geojson;
-      geojson = L.geoJson(statesData, {
-        style: style,
-        onEachFeature: onEachFeature
-      }).addTo(mymap);
-
       function getGDP(){
-        var qry = "select * from <http://course.geoinfo2017.org/GC> where { <http://example.org/data/GDP.csv#" + stateName + "> ?b ?c.}";// + slider.value  + " <http://example.org/data/GDP.csv#>
+        var qry = "select * from <http://course.geoinfo2017.org/GC> where { "+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2008> ?c."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2009> ?c1."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2010> ?c2."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2011> ?c3."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2012> ?c4."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2013> ?c5."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasGDP2014> ?c6.}";
         $.post("http://giv-oct2.uni-muenster.de:8890/sparql", {
-        query: qry,
-        output: 'json'
+          query: qry,
+          output: 'json'
         },
         function(data){
-          // var gdp = parseFloat(data.results.bindings[0].c.value);
-          // document.getElementById("getGDP").innerHTML = gdp;
           createGDPDiagram(data);
         });
       }
 
       function getROP(){
-        var qry = "select * from <http://course.geoinfo2017.org/GC> where { <http://example.org/data/povertyRate.csv#" + stateName + "> ?b ?c.}";// + slider.value  + " <http://example.org/data/GDP.csv#>
+        var qry = "select * from <http://course.geoinfo2017.org/GC> where { "+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2008> ?c."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2009> ?c1."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2010> ?c2."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2011> ?c3."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2012> ?c4."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2013> ?c5."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPoverty2014> ?c6.}";
         $.post("http://giv-oct2.uni-muenster.de:8890/sparql", {
-        query: qry,
-        output: 'json'
+          query: qry,
+          output: 'json'
         },
         function(data){
-          // var gdp = parseFloat(data.results.bindings[0].c.value);
-          // document.getElementById("getGDP").innerHTML = gdp;
           createROPDiagram(data);
         });
       }
 
       function getPopdens(){
-        var qry = "select * from <http://course.geoinfo2017.org/GC> where { <http://example.org/data/populationDensity.csv#" + stateName + "> ?b ?c.}";
+        var qry = "select * from <http://course.geoinfo2017.org/GC> where { "+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2008> ?c."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2009> ?c1."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2010> ?c2."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2011> ?c3."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2012> ?c4."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2013> ?c5."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#hasPopulationDensity2014> ?c6.}";
         $.post("http://giv-oct2.uni-muenster.de:8890/sparql", {
-        query: qry,
-        output: 'json'
+          query: qry,
+          output: 'json'
         },
         function(data){
-          // var popdens = parseFloat(data.results.bindings[0].c.value);
-          // document.getElementById("getPopulationDensity").innerHTML = popdens;
           createPDDiagram(data);
         });
       }
 
       function getNumberOfIndustries(){
-        var qry = "select * from <http://course.geoinfo2017.org/GC> where { <http://example.org/data/NumberOfIndustries.csv#" + stateName + "> ?b ?c.}";
+        var qry = "select * from <http://course.geoinfo2017.org/GC> where {"+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2008> ?c."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2009> ?c1."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2010> ?c2."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2011> ?c3."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2012> ?c4."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2013> ?c5."+
+          "<http://course.geoinfo2017.org/GC#" + stateName + "> <http://course.geoinfo2017.org/GC#NumIndustries2014> ?c6.}";
         $.post("http://giv-oct2.uni-muenster.de:8890/sparql", {
-        query: qry,
-        output: 'json'
+          query: qry,
+          output: 'json'
         },
         function(data){
           createNUIDiagram(data);
         });
       }
 
-      function getUnemplyoment(){
-        var qry = "select * from <http://course.geoinfo2017.org/GC> where { <http://example.org/data/unemploymentRate#" + stateName + "> ?b ?c.}";
+      function getData(){
+        var qry = "SELECT distinct ?unemp1 ?unemp2006 ?unemp2007 ?unemp2008 ?unemp2009 ?unemp2010 ?unemp2011 ?unemp2012 ?unemp2013 ?unemp2014 ?unemp2015 ?unemp2016 "+
+          "from <http://course.geoinfo2017.org/GC>"+
+          "WHERE {"+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2006> ?unemp2006."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2007> ?unemp2007."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2008> ?unemp2008."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2009> ?unemp2009."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2010> ?unemp2010."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2011> ?unemp2011."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2012> ?unemp2012."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2013> ?unemp2013."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2014> ?unemp2014."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2015> ?unemp2015."+
+          "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2016> ?unemp2016.}";
         $.post("http://giv-oct2.uni-muenster.de:8890/sparql", {
-        query: qry,
-        output: 'json'
+          query: qry,
+          output: 'json'
         },
         function(data){
-          return data;
+          //var wkt;
+          for (var i in data.results.bindings){
+            // wkt = data.results.bindings[i].geom.value
+            // wkt = data.results.bindings[i].geom.value;
+  				  // wkt = wkt.replace(/\)\),\(\(/g, "),(");
+            // wkt = wkt.replace("(","");
+            // wkt = wkt.substring(0, wkt.length-1);
+            // console.log('result in true' + JSON.stringify(wkt));
+
+            var sname = data.results.bindings[i].unemp1.value;
+            var hashtag = sname.indexOf("#");
+            sname = sname.substring(hashtag+1, sname.length);
+            ame[i] = sname;
+            unemp2006[i] = parseInt(data.results.bindings[i].unemp2006.value);
+            unemp2007[i] = parseInt(data.results.bindings[i].unemp2007.value);
+            unemp2008[i] = parseInt(data.results.bindings[i].unemp2008.value);
+            unemp2009[i] = parseInt(data.results.bindings[i].unemp2009.value);
+            unemp2010[i] = parseInt(data.results.bindings[i].unemp2010.value);
+            unemp2011[i] = parseInt(data.results.bindings[i].unemp2011.value);
+            unemp2012[i] = parseInt(data.results.bindings[i].unemp2012.value);
+            unemp2013[i] = parseInt(data.results.bindings[i].unemp2013.value);
+            unemp2014[i] = parseInt(data.results.bindings[i].unemp2014.value);
+            unemp2015[i] = parseInt(data.results.bindings[i].unemp2015.value);
+            unemp2016[i] = parseInt(data.results.bindings[i].unemp2016.value);
+          }
+          if (geojson) mymap.removeLayer(geojson);
+
+          geoJsonFeatureCollection = {
+            "type": "FeatureCollection",
+            "features": []
+          };
+
+          // var geoPar = Terraformer.WKT.parse(wkt);
+          // geoPar.coordinates = JSON.stringify(geoPar.coordinates);
+          // geoPar.coordinates = geoPar.coordinates.replace(/\]\],\[\[/g,"],[");
+          // console.log('after removing []s' + geoPar.coordinates);
+          // geoPar.coordinates = JSON.parse(geoPar.coordinates);
+          // gJ.geometry = geoPar;
+
+          for (var i in statesData.features){
+            gJ = {
+              "type": "Feature",
+              "id": "",
+              "properties": {},
+              "geometry": {}
+            };
+
+            for (var t in unemp2010){
+              if (statesData.features[i].properties.NAME_1 == ame[t]){
+                gJ.geometry = statesData.features[i].geometry;
+                gJ.properties = statesData.features[i].properties;
+
+                gJ.properties.unemp2006 = unemp2006[t];
+                gJ.properties.unemp2007 = unemp2007[t];
+                gJ.properties.unemp2008 = unemp2008[t];
+                gJ.properties.unemp2009 = unemp2009[t];
+                gJ.properties.unemp2010 = unemp2010[t];
+                gJ.properties.unemp2011 = unemp2011[t];
+                gJ.properties.unemp2012 = unemp2012[t];
+                gJ.properties.unemp2013 = unemp2013[t];
+                gJ.properties.unemp2014 = unemp2014[t];
+                gJ.properties.unemp2015 = unemp2015[t];
+                gJ.properties.unemp2016 = unemp2016[t];
+
+                gJ.properties.sname = ame[t];
+              }
+            }
+            geoJsonFeatureCollection.features.push(gJ);
+          }
+
+          geojson = L.geoJson(geoJsonFeatureCollection, {
+            style: style2014,
+            onEachFeature: onEachFeature
+          }).addTo(mymap);
         });
       }
-      //   var xmlhttp = new XMLHttpRequest();
-      //   var url = "http://giv-oct2.uni-muenster.de:8890/sparql?default-graph-uri=http%3A%2F%2Fcourse.geoinfo2017.org%2FGC&query=select+*%0D%0Afrom+%3Chttp%3A%2F%2Fcourse.geoinfo2017.org%2FGC%3E%0D%0Awhere%0D%0A%7B%0D%0A+%3Chttp%3A%2F%2Fexample.org%2Fdata%2FunemploymentRate%23Baden-W%C3%BCrttemberg%3E%0D%0A+%3Fb%0D%0A+%3Fc.%0D%0A+%7D&format=json&timeout=0&debug=on";
-      //   xmlhttp.onreadystatechange = function(){
-      //       if(xmlhttp.readyState == 4  && xmlhttp.status == 200){
-      //         document.getElementById("testtest").innerHTML = xmlhttp.responseText;
-      //       }
-      //   }
-      //   xmlhttp.open("POST", url, true)
-      //   xmlhttp.send()
-      //   console.log("Erfolgreich")
-      // }
 
-
-      function minmax(data) {
-          var min = parseFloat(data.results.bindings[0].c.value);
-          var max = parseFloat(data.results.bindings[0].c.value);
-          for(var i in data.results.bindings) {
-              if(parseFloat(data.results.bindings[i].c.value) < min) {
-                  min = parseFloat(data.results.bindings[i].c.value);
-              }
-              if(parseFloat(data.results.bindings[i].c.value) > max) {
-                  max = parseFloat(data.results.bindings[i].c.value);
-              }
-          }
-          return [min, max];
-      }
-
-      function createDaDa(){
+      function createDiagrams(){
         if(document.getElementById("parameter").value == "gdp"){
           getGDP();
         }
@@ -400,181 +568,173 @@
       function createGDPDiagram(data){
         var gdpdata = [];
         var gdpyear = [];
-        for(var i in data.results.bindings) {
-                gdpdata[i] = parseFloat(data.results.bindings[i].c.value);
-                //gdpyear[i] = parseInt(data.results.bindings[i].b.value);
-                console.log(gdpdata[i]);
-                //console.log(gdpyear[i]);
-            }
 
+        gdpdata[0] = parseFloat(data.results.bindings[0].c.value);
+        gdpdata[1] = parseFloat(data.results.bindings[0].c1.value);
+        gdpdata[2] = parseFloat(data.results.bindings[0].c2.value);
+        gdpdata[3] = parseFloat(data.results.bindings[0].c3.value);
+        gdpdata[4] = parseFloat(data.results.bindings[0].c4.value);
+        gdpdata[5] = parseFloat(data.results.bindings[0].c5.value);
+        gdpdata[6] = parseFloat(data.results.bindings[0].c6.value);
 
-      var chart = new CanvasJS.Chart("chartContainer", {
-  	animationEnabled: true,
-  	theme: "light1", // "light1", "light2", "dark1", "dark2"
-  	title:{
-  		text: "GDP per Capita",
-      fontFamily: "tahoma",
-  	},
-  	axisY: {
-  		title: "GDP in €"
-  	},
-  	data: [{
-  		type: "column",
-  		showInLegend: false,
-      color: "blue",
-  		// legendMarkerColor: "grey",
-  		// legendText: "MMbbl = one million barrels",
-  		dataPoints: [
-        { y: gdpdata[17], label: "2008" },
-        { y: gdpdata[18],  label: "2009" },
-        { y: gdpdata[19],  label: "2010" },
-        { y: gdpdata[20],  label: "2011" },
-        { y: gdpdata[21],  label: "2012" },
-        { y: gdpdata[22], label: "2013" },
-        { y: gdpdata[23],  label: "2014" },
-        { y: gdpdata[24],  label: "2015" }
-  		]
-  	}]
-  });
-  chart.render();
-}
-
-function createNUIDiagram(data){
-  var noidata = [];
-  var gdpyear = [];
-  for(var i in data.results.bindings) {
-          noidata[i] = parseInt(data.results.bindings[i].c.value);
-          //gdpyear[i] = parseInt(data.results.bindings[i].b.value);
-          console.log(noidata[i]);
-          //console.log(gdpyear[i]);
+        var chart = new CanvasJS.Chart("chartContainer", {
+        	animationEnabled: true,
+        	theme: "light1",
+        	title:{
+        		text: "GDP per Capita",
+            fontFamily: "tahoma",
+        	},
+        	axisY: {
+        		title: "GDP in €"
+        	},
+        	data: [{
+        		type: "column",
+        		showInLegend: false,
+            color: "blue",
+        		dataPoints: [
+              { y: gdpdata[0],  label: "2008" },
+              { y: gdpdata[1],  label: "2009" },
+              { y: gdpdata[2],  label: "2010" },
+              { y: gdpdata[3],  label: "2011" },
+              { y: gdpdata[4],  label: "2012" },
+              { y: gdpdata[5],  label: "2013" },
+              { y: gdpdata[6],  label: "2014" },
+        		]
+        	}]
+        });
+        chart.render();
       }
 
+      function createNUIDiagram(data){
+        var noidata = [];
+        var gdpyear = [];
 
-var chart = new CanvasJS.Chart("chartContainer", {
-animationEnabled: true,
-theme: "light1", // "light1", "light2", "dark1", "dark2"
-title:{
-text: "Number of Industries",
-fontFamily: "tahoma",
-},
-axisY: {
-title: "Number of Industries"
-},
-data: [{
-type: "column",
-color: "black",
-showInLegend: false,
-// legendMarkerColor: "grey",
-// legendText: "MMbbl = one million barrels",
-dataPoints: [
-  { y: noidata[0], label: "2008" },
-  { y: noidata[1],  label: "2009" },
-  { y: noidata[2],  label: "2010" },
-  { y: noidata[3],  label: "2011" },
-  { y: noidata[4],  label: "2012" },
-  { y: noidata[5], label: "2013" },
-  { y: noidata[6],  label: "2014" },
-  { y: noidata[7],  label: "2015" },
-]
-}]
-});
-chart.render();
-}
+        noidata[0] = parseInt(data.results.bindings[0].c.value);
+        noidata[1] = parseInt(data.results.bindings[0].c1.value);
+        noidata[2] = parseInt(data.results.bindings[0].c2.value);
+        noidata[3] = parseInt(data.results.bindings[0].c3.value);
+        noidata[4] = parseInt(data.results.bindings[0].c4.value);
+        noidata[5] = parseInt(data.results.bindings[0].c5.value);
+        noidata[6] = parseInt(data.results.bindings[0].c6.value);
 
-function createROPDiagram(data){
-  var ropdata = [];
-  var gdpyear = [];
-  for(var i in data.results.bindings) {
-          ropdata[i] = parseFloat(data.results.bindings[i].c.value);
-          //gdpyear[i] = parseInt(data.results.bindings[i].b.value);
-          console.log(ropdata[i]);
-          //console.log(gdpyear[i]);
+        var chart = new CanvasJS.Chart("chartContainer", {
+          animationEnabled: true,
+          theme: "light1",
+          title:{
+            text: "Number of Industries",
+            fontFamily: "tahoma",
+          },
+          axisY: {
+            title: "Number of Industries"
+          },
+          data: [{
+            type: "column",
+            color: "black",
+            showInLegend: false,
+            // legendMarkerColor: "grey",
+            // legendText: "MMbbl = one million barrels",
+            dataPoints: [
+              { y: noidata[0],  label: "2008" },
+              { y: noidata[1],  label: "2009" },
+              { y: noidata[2],  label: "2010" },
+              { y: noidata[3],  label: "2011" },
+              { y: noidata[4],  label: "2012" },
+              { y: noidata[5],  label: "2013" },
+              { y: noidata[6],  label: "2014" },
+            ]
+          }]
+        });
+      chart.render();
       }
 
+      function createROPDiagram(data){
+        var ropdata = [];
+        var gdpyear = [];
 
-var chart = new CanvasJS.Chart("chartContainer", {
-animationEnabled: true,
-theme: "light1", // "light1", "light2", "dark1", "dark2"
-title:{
-text: "Risk of Poverty",
-fontFamily: "tahoma",
-},
-axisY: {
-title: "Poverty rate in %"
-},
-data: [{
-type: "column",
-color: "darkred",
-showInLegend: false,
-// legendMarkerColor: "grey",
-// legendText: "MMbbl = one million barrels",
-dataPoints: [
-  { y: ropdata[3], label: "2008" },
-  { y: ropdata[4],  label: "2009" },
-  { y: ropdata[5],  label: "2010" },
-  { y: ropdata[6],  label: "2011" },
-  { y: ropdata[7],  label: "2012" },
-  { y: ropdata[8], label: "2013" },
-  { y: ropdata[9],  label: "2014" },
-  { y: ropdata[10],  label: "2015" },
-]
-}]
-});
-chart.render();
-}
+        ropdata[0] = parseFloat(data.results.bindings[0].c.value);
+        ropdata[1] = parseFloat(data.results.bindings[0].c1.value);
+        ropdata[2] = parseFloat(data.results.bindings[0].c2.value);
+        ropdata[3] = parseFloat(data.results.bindings[0].c3.value);
+        ropdata[4] = parseFloat(data.results.bindings[0].c4.value);
+        ropdata[5] = parseFloat(data.results.bindings[0].c5.value);
+        ropdata[6] = parseFloat(data.results.bindings[0].c6.value);
 
-function createPDDiagram(data){
-  var pddata = [];
-  var gdpyear = [];
-  for(var i in data.results.bindings) {
-          pddata[i] = parseFloat(data.results.bindings[i].c.value);
-          //gdpyear[i] = parseInt(data.results.bindings[i].b.value);
-          console.log(pddata[i]);
-          //console.log(gdpyear[i]);
+        var chart = new CanvasJS.Chart("chartContainer", {
+          animationEnabled: true,
+          theme: "light1",
+          title:{
+            text: "Risk of Poverty",
+            fontFamily: "tahoma",
+          },
+          axisY: {
+            title: "Poverty rate in %"
+          },
+          data: [{
+            type: "column",
+            color: "darkred",
+            showInLegend: false,
+            // legendMarkerColor: "grey",
+            // legendText: "MMbbl = one million barrels",
+            dataPoints: [
+              { y: ropdata[0],  label: "2008" },
+              { y: ropdata[1],  label: "2009" },
+              { y: ropdata[2],  label: "2010" },
+              { y: ropdata[3],  label: "2011" },
+              { y: ropdata[4],  label: "2012" },
+              { y: ropdata[5],  label: "2013" },
+              { y: ropdata[6],  label: "2014" },
+            ]
+          }]
+        });
+      chart.render();
       }
 
+      function createPDDiagram(data){
+        var pddata = [];
+        var gdpyear = [];
 
-var chart = new CanvasJS.Chart("chartContainer", {
-animationEnabled: true,
-theme: "light1", // "light1", "light2", "dark1", "dark2"
-title:{
-text: "Population density",
-fontFamily: "tahoma",
-},
-axisY: {
-title: "Population density per km²",
-// interval: 50
-},
-data: [{
-type: "column",
-color: "gray",
-showInLegend: false,
-// legendMarkerColor: "grey",
-// legendText: "MMbbl = one million barrels",
-dataPoints: [
-  { y: pddata[14], label: "2008" },
-  { y: pddata[0],  label: "2009" },
-  { y: pddata[15],  label: "2010" },
-  { y: pddata[16],  label: "2011" },
-  { y: pddata[17],  label: "2012" },
-  { y: pddata[18], label: "2013" },
-  { y: pddata[19],  label: "2014" },
-  { y: pddata[20],  label: "2015" }
-]
-}]
-});
-chart.render();
-}
+        pddata[0] = parseInt(data.results.bindings[0].c.value);
+        pddata[1] = parseInt(data.results.bindings[0].c1.value);
+        pddata[2] = parseInt(data.results.bindings[0].c2.value);
+        pddata[3] = parseInt(data.results.bindings[0].c3.value);
+        pddata[4] = parseInt(data.results.bindings[0].c4.value);
+        pddata[5] = parseInt(data.results.bindings[0].c5.value);
+        pddata[6] = parseInt(data.results.bindings[0].c6.value);
 
+        var chart = new CanvasJS.Chart("chartContainer", {
+          animationEnabled: true,
+          theme: "light1",
+          title:{
+            text: "Population density",
+            fontFamily: "tahoma",
+          },
+          axisY: {
+            title: "Population density per km²",
+          // interval: 50
+          },
+          data: [{
+            type: "column",
+            color: "gray",
+            showInLegend: false,
+            // legendMarkerColor: "grey",
+            // legendText: "MMbbl = one million barrels",
+            dataPoints: [
+              { y: pddata[0],  label: "2008" },
+              { y: pddata[1],  label: "2009" },
+              { y: pddata[2],  label: "2010" },
+              { y: pddata[3],  label: "2011" },
+              { y: pddata[4],  label: "2012" },
+              { y: pddata[5],  label: "2013" },
+              { y: pddata[6],  label: "2014" },
+            ]
+        }]
+        });
+        chart.render();
+      }
 
+      getData();
 
-
-
-
-      //document.getElementById("button").onclick = function() {getData()};
-      // document.getElementById("button2").onclick = function() {minmax(data)};
-
-    </script>
+      </script>
 
     </body>
 
