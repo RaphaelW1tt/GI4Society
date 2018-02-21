@@ -6,13 +6,13 @@
     <!-- Encoding -->
     <meta charset="UTF-8">
     <!-- Description of Web Page -->
-    <meta name="description" content="GIS Project">
+    <meta name="description" content="Geoinformation in Society project">
     <!-- Keywords important for Google -->
     <meta name="keywords" content="Raphael Witt, Zhendong Yuan, Geoinformatics, Students">
     <!-- Author -->
     <meta name="author" content="Raphael Witt, Zhendong Yuan">
     <!-- Title -->
-    <title>Unemployment Data Visualisation - GI in Society</title>
+    <title>Unemployment in federal states of Germany</title>
 
 	  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
@@ -37,11 +37,12 @@
       margin-top: 10px;
     }
   	div#mapid {
-	  height: 450px;
       border-radius: 20px;
       border-style: solid;
       border-color: gray;
       border-width: 1px;
+      margin-top: 1%;
+      margin-bottom: 15px;
   	}
     div#displaybox {
       border-radius: 20px;
@@ -50,6 +51,8 @@
       border-width: 1px;
       margin-left: 30px;
       margin-right: 10px;
+      margin-top: 1%;
+      margin-bottom: 15px;
     }
     div#displayfunctions {
       border-radius: 20px;
@@ -58,17 +61,20 @@
       border-width: 1px;
       margin-left: 10px;
       margin-right: 30px;
+      margin-top: 1%;
+      margin-bottom: 15px;
     }
     #parameter {
       width: 100%;
+      margin-top: 5px;
     }
     #slidervalue {
       text-align: center;
-      margin-top: 5px;
+      margin-top: 0%;
     }
     .slidecontainer {
+      margin-top: 40%;
       width: 100%;
-      margin-top: 35%;
     }
     .slider {
       -webkit-appearance: none;
@@ -78,19 +84,19 @@
       background: #d3d3d3;
       outline: inherit;
       opacity: 1;
+      margin-top: 5%;
+      margin-bottom: 5%;
     }
     .container-fluid {
-      margin-top: 25px;
-      margin-bottom: 10px;
-    }
-    .centered{
-      float: none;
-      margin: 0 auto;
+      margin-top: 2%;
+      margin-bottom: 1%;
     }
     #chartContainer {
-      margin-top: 20%;
-      margin-bottom: 5px;
-      height: 65%;
+      position: inherit;
+      height: 70%;
+      padding-top: 10%;
+      padding-right: 5%;
+      padding-bottom: 5%;
     }
     .head {
       position: absolute;
@@ -146,17 +152,18 @@
           <br>
           <h5>Parameter selection</h5>
           <form>
-		  		      <select name="parameter" id="parameter" >
+		  		      <select name="parameter" id="parameter" onchange="createDiagrams()">
                   <option value="numofindustries">Number of industries</option>
                   <option value="popdens">Population density</option>
 				          <option value="gdp">GDP per capita</option>
 				          <option value="riskofpoverty">Risk of poverty</option>
                 </select>
 		            <div class="slidecontainer">
-		                <input type="range" min="2006" max="2016" value="2010" class="slider" id="sliderRange">
+                    <h5>Time slider</h5>
+		                <input type="range" min="2006" max="2016" value="2011" class="slider" id="sliderRange">
 		            </div>
 		            <div id="slidervalue">
-		                <font size="4" id="year">2010</font>
+		                <font size="4" id="year">2011</font>
 	              </div>
           </form>
         </div>
@@ -377,6 +384,7 @@
 
       function highlightFeature(e) {
         var layer = e.target;
+        layer.bringToFront();
         layer.setStyle({
             weight: 3,
             color: 'black',
@@ -394,7 +402,6 @@
           mouseover: highlightFeature,
           mouseout: resetHighlight,
           click: function(e){
-            // mymap.fitBounds(e.target.getBounds());
             stateName = feature.properties.NAME_1;
             document.getElementById("getStateName").innerHTML = "Selected federal state:" + "<br/>" + stateName;
             createDiagrams();
@@ -609,7 +616,8 @@
         	theme: "light1",
         	title:{
         		text: "GDP per Capita",
-            fontFamily: "tahoma",
+            fontFamily: "arial",
+            fontSize: 17,
         	},
         	axisY: {
         		title: "GDP in €"
@@ -617,7 +625,7 @@
         	data: [{
         		type: "column",
         		showInLegend: false,
-            color: "blue",
+            color: "#80b1d3",
         		dataPoints: [
               { y: gdpdata[0],  label: "2008" },
               { y: gdpdata[1],  label: "2009" },
@@ -649,14 +657,15 @@
           theme: "light1",
           title:{
             text: "Number of Industries",
-            fontFamily: "tahoma",
+            fontFamily: "arial",
+            fontSize: 17,
           },
           axisY: {
-            title: "Number of Industries"
+            title: "Quantity"
           },
           data: [{
             type: "column",
-            color: "black",
+            color: "#bababa",
             showInLegend: false,
             // legendMarkerColor: "grey",
             // legendText: "MMbbl = one million barrels",
@@ -691,14 +700,15 @@
           theme: "light1",
           title:{
             text: "Risk of Poverty",
-            fontFamily: "tahoma",
+            fontFamily: "arial",
+            fontSize: 17,
           },
           axisY: {
             title: "Poverty rate in %"
           },
           data: [{
             type: "column",
-            color: "darkred",
+            color: "#5e3c99",
             showInLegend: false,
             // legendMarkerColor: "grey",
             // legendText: "MMbbl = one million barrels",
@@ -733,7 +743,8 @@
           theme: "light1",
           title:{
             text: "Population density",
-            fontFamily: "tahoma",
+            fontFamily: "arial",
+            fontSize: 17,
           },
           axisY: {
             title: "Population density per km²",
@@ -741,7 +752,7 @@
           },
           data: [{
             type: "column",
-            color: "gray",
+            color: "#66c2a5",
             showInLegend: false,
             // legendMarkerColor: "grey",
             // legendText: "MMbbl = one million barrels",
