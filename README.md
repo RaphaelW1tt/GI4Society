@@ -1,9 +1,9 @@
 # GI4Society
-Repository for Geoinformation in Society (WS 2017/2018)
-
-Project work for the course "Geoinformation in Society" in the winter semester 2017/2018 at ifgi, University of Münster.
+Repository for the project of Geoinformation in Society (WS 2017/2018).
 
 Project members:
 - Raphael Witt
 - Zhendong Yuan
-- Mohammad Robiul Hussain
+
+To get the project application running, just download/clone this repository and open the *index.html*.
+There are no further installations required.
