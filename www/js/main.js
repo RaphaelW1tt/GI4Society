@@ -4,6 +4,8 @@
       var gJ;
       var geojson;
       var ame = [];
+      var wkt = [];
+      var geoPar = [];
       var unemp2006 = [];
       var unemp2007 = [];
       var unemp2008 = [];
@@ -246,7 +248,7 @@
           mouseover: highlightFeature,
           mouseout: resetHighlight,
           click: function(e){
-            stateName = feature.properties.NAME_1;
+            stateName = feature.properties.sname;
             document.getElementById("getStateName").innerHTML = "Selected federal state:" + "<br/>" + stateName;
             createDiagrams();
             console.log(feature.properties);
@@ -337,9 +339,11 @@
 
       // Function for querying shape geometry and unemployment data from the triple store
       function getData(){
-        var qry = "SELECT distinct ?unemp1 ?unemp2006 ?unemp2007 ?unemp2008 ?unemp2009 ?unemp2010 ?unemp2011 ?unemp2012 ?unemp2013 ?unemp2014 ?unemp2015 ?unemp2016 "+
+        var qry = "SELECT distinct ?unemp1 ?id ?geom ?unemp2006 ?unemp2007 ?unemp2008 ?unemp2009 ?unemp2010 ?unemp2011 ?unemp2012 ?unemp2013 ?unemp2014 ?unemp2015 ?unemp2016 "+
           "from <http://course.geoinfo2017.org/GC>"+
           "WHERE {"+
+          "?id <http://www.opengis.net/ont/sf#asWKT> ?geom."+
+          "?unemp1 <http://www.opengis.net/ont/sf#hasGeometry> ?id."+
           "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2006> ?unemp2006."+
           "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2007> ?unemp2007."+
           "?unemp1 <http://course.geoinfo2017.org/GC#hasUnemployment2008> ?unemp2008."+
@@ -356,14 +360,26 @@
           output: 'json'
         },
         function(data){
-          //var wkt;
           for (var i in data.results.bindings){
-            // wkt = data.results.bindings[i].geom.value
-            // wkt = data.results.bindings[i].geom.value;
-  				  // wkt = wkt.replace(/\)\),\(\(/g, "),(");
-            // wkt = wkt.replace("(","");
-            // wkt = wkt.substring(0, wkt.length-1);
-            // console.log('result in true' + JSON.stringify(wkt));
+            wkt[i] = data.results.bindings[i].geom.value;
+            wkt[i] = wkt[i].replace(/\[/g, "(");
+            wkt[i] = wkt[i].replace(/\]/g, ")");
+            wkt[i] = wkt[i].replace(/\d(,)/g," ");
+            if((data.results.bindings[i].id.value == "nodeID://b12101")
+             ||(data.results.bindings[i].id.value == "nodeID://b12105")
+             ||(data.results.bindings[i].id.value == "nodeID://b12106")
+             ||(data.results.bindings[i].id.value == "nodeID://b12108")
+             ||(data.results.bindings[i].id.value == "nodeID://b12109")
+             ||(data.results.bindings[i].id.value == "nodeID://b12115")){
+              wkt[i] = wkt[i].replace("(", "");
+              wkt[i] = wkt[i].substring(0, wkt[i].length-1);
+              wkt[i] = wkt[i].replace(/\)\),\(\(/g, "),(");
+            }
+
+            geoPar[i] = Terraformer.WKT.parse(wkt[i]);
+            geoPar[i].coordinates = JSON.stringify(geoPar[i].coordinates);
+            geoPar[i].coordinates = geoPar[i].coordinates.replace(/\]\],\[\[/g,"],[");
+            geoPar[i].coordinates = JSON.parse(geoPar[i].coordinates);
 
             var sname = data.results.bindings[i].unemp1.value;
             var hashtag = sname.indexOf("#");
@@ -388,14 +404,7 @@
             "features": []
           };
 
-          // var geoPar = Terraformer.WKT.parse(wkt);
-          // geoPar.coordinates = JSON.stringify(geoPar.coordinates);
-          // geoPar.coordinates = geoPar.coordinates.replace(/\]\],\[\[/g,"],[");
-          // console.log('after removing []s' + geoPar.coordinates);
-          // geoPar.coordinates = JSON.parse(geoPar.coordinates);
-          // gJ.geometry = geoPar;
-
-          for (var i in statesData.features){
+          for (var t in wkt){
             gJ = {
               "type": "Feature",
               "id": "",
@@ -403,26 +412,21 @@
               "geometry": {}
             };
 
-            for (var t in unemp2010){
-              if (statesData.features[i].properties.NAME_1 == ame[t]){
-                gJ.geometry = statesData.features[i].geometry;
-                gJ.properties = statesData.features[i].properties;
+            gJ.geometry = geoPar[t];
+            gJ.properties.unemp2006 = unemp2006[t];
+            gJ.properties.unemp2007 = unemp2007[t];
+            gJ.properties.unemp2008 = unemp2008[t];
+            gJ.properties.unemp2009 = unemp2009[t];
+            gJ.properties.unemp2010 = unemp2010[t];
+            gJ.properties.unemp2011 = unemp2011[t];
+            gJ.properties.unemp2012 = unemp2012[t];
+            gJ.properties.unemp2013 = unemp2013[t];
+            gJ.properties.unemp2014 = unemp2014[t];
+            gJ.properties.unemp2015 = unemp2015[t];
+            gJ.properties.unemp2016 = unemp2016[t];
 
-                gJ.properties.unemp2006 = unemp2006[t];
-                gJ.properties.unemp2007 = unemp2007[t];
-                gJ.properties.unemp2008 = unemp2008[t];
-                gJ.properties.unemp2009 = unemp2009[t];
-                gJ.properties.unemp2010 = unemp2010[t];
-                gJ.properties.unemp2011 = unemp2011[t];
-                gJ.properties.unemp2012 = unemp2012[t];
-                gJ.properties.unemp2013 = unemp2013[t];
-                gJ.properties.unemp2014 = unemp2014[t];
-                gJ.properties.unemp2015 = unemp2015[t];
-                gJ.properties.unemp2016 = unemp2016[t];
+            gJ.properties.sname = ame[t];
 
-                gJ.properties.sname = ame[t];
-              }
-            }
             geoJsonFeatureCollection.features.push(gJ);
           }
 
