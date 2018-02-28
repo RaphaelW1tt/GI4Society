@@ -7,3 +7,8 @@ Project members:
 
 To get the project application running, just download/clone this repository and open the *index.html*.
 There are no further installations required.
+
+### License
+MIT License.
+
+This is the license for the source codes, NOT INCLUDING THE DATA OR ANY USED LIBRARY.
