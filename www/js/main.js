@@ -18,7 +18,7 @@
       var unemp2015 = [];
       var unemp2016 = [];
 
-      // Functionality for changing layer style (unemployment) according to selected year
+      // Functionality for changing layer style (unemployment) according to selected year of the slider
       var slider = document.getElementById("sliderRange");
     	var output = document.getElementById("year");
     	output.innerHTML = slider.value;
@@ -58,7 +58,7 @@
       ]);
       mymap.doubleClickZoom.disable();
 
-      // Adding tile layer from OSM
+      // Adding tile layer map from OSM
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 14,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>, Contributor of state data: <a href="https://github.com/isellsoap">Francesco Schwarz</a>',
@@ -214,7 +214,7 @@
         });
       }
 
-      // Function for resetting the highlighting by moving the mouse out of the state
+      // Function for resetting the highlighting by moving the mouse out of the state boundaries
       function resetHighlight(e) {
         geojson.resetStyle(e.target);
         if(slider.value == 2006){
@@ -242,7 +242,7 @@
         }
       }
 
-      // Functionalities for the features of the layer
+      // Functionalities for the features of the layer (hover over/click on/double click on)
       function onEachFeature(feature, layer) {
         layer.on({
           mouseover: highlightFeature,
@@ -361,10 +361,12 @@
         },
         function(data){
           for (var i in data.results.bindings){
+            // Processing the geometries to transform them into Well-known text (WKT)
             wkt[i] = data.results.bindings[i].geom.value;
             wkt[i] = wkt[i].replace(/\[/g, "(");
             wkt[i] = wkt[i].replace(/\]/g, ")");
             wkt[i] = wkt[i].replace(/\d(,)/g," ");
+            // Six geometries have additional brackets at the beginning and at the end so they are removed
             if((data.results.bindings[i].id.value == "nodeID://b12101")
              ||(data.results.bindings[i].id.value == "nodeID://b12105")
              ||(data.results.bindings[i].id.value == "nodeID://b12106")
@@ -376,15 +378,18 @@
               wkt[i] = wkt[i].replace(/\)\),\(\(/g, "),(");
             }
 
+            // Transform the geometries into WKT with Terraformer
             geoPar[i] = Terraformer.WKT.parse(wkt[i]);
             geoPar[i].coordinates = JSON.stringify(geoPar[i].coordinates);
+            // Replacement of double squared brackets and comma with single squared brackets and comma to make it a valid geojson geometry
             geoPar[i].coordinates = geoPar[i].coordinates.replace(/\]\],\[\[/g,"],[");
             geoPar[i].coordinates = JSON.parse(geoPar[i].coordinates);
-
+            // Getting the name of the federal states
             var sname = data.results.bindings[i].unemp1.value;
             var hashtag = sname.indexOf("#");
             sname = sname.substring(hashtag+1, sname.length);
             ame[i] = sname;
+            // Getting the unemployment numbers
             unemp2006[i] = parseInt(data.results.bindings[i].unemp2006.value);
             unemp2007[i] = parseInt(data.results.bindings[i].unemp2007.value);
             unemp2008[i] = parseInt(data.results.bindings[i].unemp2008.value);
@@ -397,13 +402,16 @@
             unemp2015[i] = parseInt(data.results.bindings[i].unemp2015.value);
             unemp2016[i] = parseInt(data.results.bindings[i].unemp2016.value);
           }
+          // If geojson layer already exists, remove it
           if (geojson) mymap.removeLayer(geojson);
 
+          // Creating one featurecollection
           geoJsonFeatureCollection = {
             "type": "FeatureCollection",
             "features": []
           };
 
+          // Creating features for each state
           for (var t in wkt){
             gJ = {
               "type": "Feature",
@@ -426,10 +434,10 @@
             gJ.properties.unemp2016 = unemp2016[t];
 
             gJ.properties.sname = ame[t];
-
+            // Pushing each feature into the featurecollection
             geoJsonFeatureCollection.features.push(gJ);
           }
-
+          // Add the featurecollection as a geojson layer to the map
           geojson = L.geoJson(geoJsonFeatureCollection, {
             style: style2011,
             onEachFeature: onEachFeature
@@ -437,7 +445,7 @@
         });
       }
 
-      // Function for creating bar diagrams
+      // Function for creating bar diagrams when a parameter is selected
       function createDiagrams(){
         if(document.getElementById("parameter").value == "gdp"){
           getGDP();
