@@ -9,5 +9,6 @@ To get the project application running, just download/clone this repository and 
 There are no further installations required.
 
 ### License
-MIT License
+MIT License.
+
 This is the license for the source codes, NOT INCLUDING THE DATA OR ANY USED LIBRARY.
