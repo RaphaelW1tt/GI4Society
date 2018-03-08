@@ -405,7 +405,7 @@
           // If geojson layer already exists, remove it
           if (geojson) mymap.removeLayer(geojson);
 
-          // Creating one featurecollection
+          // Creating one geojson featurecollection
           geoJsonFeatureCollection = {
             "type": "FeatureCollection",
             "features": []
@@ -464,7 +464,6 @@
       // Function for creating the GDP bar diagram
       function createGDPDiagram(data){
         var gdpdata = [];
-        var gdpyear = [];
 
         gdpdata[0] = parseFloat(data.results.bindings[0].c.value);
         gdpdata[1] = parseFloat(data.results.bindings[0].c1.value);
@@ -506,7 +505,6 @@
       // Function for creating the number of industries bar diagram
       function createNUIDiagram(data){
         var noidata = [];
-        var gdpyear = [];
 
         noidata[0] = parseInt(data.results.bindings[0].c.value);
         noidata[1] = parseInt(data.results.bindings[0].c1.value);
@@ -548,7 +546,6 @@
       // Function for creating the risk of poverty bar diagram
       function createROPDiagram(data){
         var ropdata = [];
-        var gdpyear = [];
 
         ropdata[0] = parseFloat(data.results.bindings[0].c.value);
         ropdata[1] = parseFloat(data.results.bindings[0].c1.value);
@@ -590,7 +587,6 @@
       // Function for creating the population density bar diagram
       function createPDDiagram(data){
         var pddata = [];
-        var gdpyear = [];
 
         pddata[0] = parseInt(data.results.bindings[0].c.value);
         pddata[1] = parseInt(data.results.bindings[0].c1.value);
