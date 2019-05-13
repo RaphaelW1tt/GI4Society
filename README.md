@@ -8,6 +8,9 @@ Project members:
 To get the project application running, just download/clone this repository and open the *index.html* in the www-Folder.
 There are no further installations required.
 
+![Screenshot2](./screenshot2.png)
+
+![Screenshot1](./screenshot1.png)
 
 
 ### License
