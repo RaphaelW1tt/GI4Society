@@ -37,7 +37,7 @@
 			if (layer.feature.properties.highlight === true) {
 				layer.setStyle({
 					weight: 3,
-					fillOpacity: 0.7,
+					fillOpacity: 0.85,
 					fillColor: getColor(layer["feature"]["properties"]["unemp" + year])
 				});
 			} else {

@@ -12,6 +12,8 @@ There are no further installations required.
 
 ![Screenshot1](./screenshot1.png)
 
+![Screenshot1](./screenshot3.png)
+
 
 ### License
 MIT License.
