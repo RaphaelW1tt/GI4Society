@@ -26,6 +26,7 @@ div#displaybox {
   margin-right: 10px;
   margin-top: 1%;
   margin-bottom: 15px;
+  padding-top: 10px;
 }
 div#displayfunctions {
   border-radius: 20px;
@@ -36,6 +37,7 @@ div#displayfunctions {
   margin-right: 30px;
   margin-top: 1%;
   margin-bottom: 15px;
+  padding-top: 10px;
 }
 #parameter {
   width: 100%;
